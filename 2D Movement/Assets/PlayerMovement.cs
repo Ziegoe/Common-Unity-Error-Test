@@ -1,41 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : MonoBehaviour
+{
+    public CharacterController2D controller;
+    public float runSpeed = 40f;
 
-	public CharacterController2D controller;
+    private float horizontalMove = 0f;
+    private bool jump = false;
+    private bool crouch = false;
 
-	public float runSpeed = 40f;
+    private void Update()
+    {
+        // Get horizontal movement input
+        horizontalMove = Input.GetAxis("Horizontal") * runSpeed; 
 
-	float horizontalMove = 0f;
-	bool jump = false;
-	bool crouch = false;
-	
-	// Update is called once per frame
-	void Update () {
+        // Check if jump button is pressed
+        if (Input.GetButtonDown("Jump"))
+        {
+            jump = true;
+        }
 
-		horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+        // Check if crouch button is pressed or released
+        if (Input.GetButtonDown("Crouch"))
+        {
+            crouch = true;
+        }
+        else if (Input.GetButtonUp("Crouch"))
+        {
+            crouch = false;
+        }
+    }
 
-		if (Input.GetButtonDown("Jump"))
-		{
-			jump = true;
-		}
+    private void FixedUpdate()
+    {
+        // Move the character
+        controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
+        jump = false;
+    }
 
-		if (Input.GetButtonDown("Crouch"))
-		{
-			crouch = true;
-		} else if (Input.GetButtonUp("Crouch"))
-		{
-			crouch = false;
-		}
-
-	}
-
-	void FixedUpdate ()
-	{
-		// Move our character
-		controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
-		jump = false;
-	}
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("PowerUp"))
+        {
+            other.gameObject.SetActive(false);
+        }
+    }
 }

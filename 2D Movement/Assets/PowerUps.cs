@@ -5,9 +5,10 @@ using UnityEngine;
 public class PowerUps : MonoBehaviour
 {
     public GameObject[] powerups;
+
     void Start()
     {
-        SpawnPowerup();
+        StartCoroutine(SpawnPowerup());
     }
 
     IEnumerator SpawnPowerup()
@@ -15,8 +16,8 @@ public class PowerUps : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(2);
-            int randomIndex = Random.Range(-5, powerups.Length + 5);
-            Instantiate(powerups[randomIndex], new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 0), Quaternion.identity);
+            int randomIndex = Random.Range(0, powerups.Length);
+            Instantiate(powerups[randomIndex], new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0), Quaternion.identity);
         }
     }
 }

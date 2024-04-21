@@ -6,7 +6,7 @@ public class BackgroundAudio : MonoBehaviour
 {
     public AudioClip backgroundMusic;
 
-    void Update()
+    void Start()
     {
         var audio = gameObject.AddComponent<AudioSource>();
         audio.clip = backgroundMusic;
